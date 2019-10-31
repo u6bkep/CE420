@@ -53,8 +53,6 @@ unsigned char readButtons(unsigned char mode) {
     }
 	
 	
-	
-	
 	//check if S1 is pressed to toggle between MODE1 and MODE2
     
 
@@ -154,16 +152,13 @@ void mode2TLights(void) {
     outputTLights(2,RED);
     msDelay(500);
     
-    
     outputTLights(0,RED);
     msDelay(500);
-    
     
     enableTLights();
     outputTLights(1,RED);
     outputTLights(2,RED);
     msDelay(500);
-    
     
     outputTLights(0,RED);
     

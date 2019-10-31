@@ -1,9 +1,5 @@
 /* ************************************************************************** */
-/** 
-//Provide complete documentation ....
 
-
- */
 /* ************************************************************************** */
 
 #include <p32xxxx.h>
@@ -39,6 +35,7 @@ int main(void) {
     {
         mode = readButtons(mode);
         
+        //state machine to handle modes
         switch(mode)
         {
             case MODE1:
@@ -54,33 +51,6 @@ int main(void) {
         }
     }
     
-    /*
-    //test pattern 1
-    while(1)
-    {
-        outputTLights(1,RED);
-        msDelay(500);
-        outputTLights(1,YELLOW);
-        msDelay(500);
-        outputTLights(1,GREEN);
-        msDelay(500);
-        outputTLights(1,WHITE);
-        msDelay(500);
-        outputTLights(2,RED);
-        msDelay(500);
-        outputTLights(2,YELLOW);
-        msDelay(500);
-        outputTLights(2,GREEN);
-        msDelay(500);
-        outputTLights(2,WHITE);
-        msDelay(500);
-    }*/
-    /*
-     //test pattern 2
-    while(1)
-    {
-        multiplexColors(RED, YELLOW, GREEN, WHITE, 1000);
-        multiplexColors(GREEN, WHITE, RED, YELLOW, 1000);
-    }*/
+
 }
 
