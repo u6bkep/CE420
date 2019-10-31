@@ -1,0 +1,41 @@
+Disassembly Listing for Lab1
+Generated From:
+/home/ben/Documents/school/CE420/Lab1.X/dist/default/debug/Lab1.X.debug.elf
+Oct 16, 2019 3:58:45 PM
+
+---  /data/home/ben/Documents/school/CE420/Lab1.X/main.c  -----------------------------------------------
+1:                 #include <p24Fxxxx.h>
+2:                 int delay;
+3:                 int main()
+4:                 {
+0002CE  FA0000     LNK #0x0
+5:                     
+6:                     TRISA = 0;
+0002D0  EF22C0     CLR TRISA
+7:                     PORTA = 0x00;
+0002D2  EF22C2     CLR PORTA
+8:                     while(1) {
+9:                         PORTA ++;
+0002D4  801610     MOV PORTA, W0
+0002D6  E80000     INC W0, W0
+0002D8  881610     MOV W0, PORTA
+10:                        delay = 100;
+0002DA  200640     MOV #0x64, W0
+0002DC  884000     MOV W0, delay
+11:                        while(delay--);
+0002DE  000000     NOP
+0002E0  804000     MOV delay, W0
+0002E2  780080     MOV W0, W1
+0002E4  A7F001     BTSC W1, #15
+0002E6  EA0081     NEG W1, W1
+0002E8  EA0081     NEG W1, W1
+0002EA  DE08CF     LSR W1, #15, W1
+0002EC  784081     MOV.B W1, W1
+0002EE  E90000     DEC W0, W0
+0002F0  884000     MOV W0, delay
+0002F2  E00401     CP0.B W1
+0002F4  3AFFF5     BRA NZ, .L2
+12:                    }
+0002F6  37FFEE     BRA .L3
+13:                }
+14:                
