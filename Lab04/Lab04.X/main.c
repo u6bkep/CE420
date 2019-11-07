@@ -12,7 +12,7 @@
 int main(void) {
     DDPCONbits.JTAGEN = 0;
     //declare any local variables you may need
-    unsinged char number
+    unsigned char number;
     
     initKeypad();   
     initUART1();

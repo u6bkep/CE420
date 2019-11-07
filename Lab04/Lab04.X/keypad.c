@@ -114,13 +114,13 @@ char readKey(void)
     //reset column
     column3 = 1;
     msDelay(12);
-    returnVal = '\0';
+    //returnVal = '\0';
     
     return returnVal;
 }
-
+/*
 //setup the time delay
-void msDelay(unsinged int ms)
+void msDelay(unsigned int ms)
 {
     //figures out how many clock cycles it will go through in ms miliseconds
     unsigned int tick = ms * (ONE_SEC_TICK / 1000);
@@ -130,8 +130,19 @@ void msDelay(unsinged int ms)
     
     //waits until the core timer reaches the target value
     while(tick > _CP0_SET_COUNT());
-}
+}*/
 
+//generate time delay for the specified amount of milliseconds
+void msDelay(unsigned int ms) 
+{
+    // Convert ms microseconds into how many clock ticks it will take
+    unsigned int ticks = ms * ( ONE_SEC_TICK /1000);
+//    ms *= TIMER_FREQ / 1000000 ; // Core Timer updates every 2 ticks
+
+    _CP0_SET_COUNT(0); // Set Core Timer count to 0
+
+    while (ticks > _CP0_GET_COUNT()); // Wait until Core Timer count reaches the number we calculated earlier
+}
 void Debounce (void)
 {
     column1 = 0;
@@ -139,9 +150,9 @@ void Debounce (void)
     column3 = 0;
     
     while ((row1 == 0) || (row2 == 0) || (row3 == 0) || (row4 == 0))
-{
+    {
     //do nothing
-}
+    }
     //reset all columns
     column1 = 1;
     column2 = 1;

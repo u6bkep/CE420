@@ -21,9 +21,9 @@ extern "C" {
 #define IN      1       
 #define OUT     0
     
-#define column1 PORTBbits.RB11
+#define column1 PORTBbits.RB15
 #define column2 PORTBbits.RB3
-#define column3 PORTBbits.RB15
+#define column3 PORTBbits.RB11
     
 #define row1 PORTBbits.RB5
 #define row2 PORTBbits.RB13
