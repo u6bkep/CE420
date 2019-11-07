@@ -31,6 +31,8 @@ extern "C" {
 
 #define CPU_FREQ    80000000
 #define ONE_SEC_TICKS (CPU_FREQ/2)
+    
+    
 
 //port configuration values for input & output    
 #define IN      1       
