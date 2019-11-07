@@ -10,7 +10,9 @@
 #pragma config FPBDIV=DIV_2, FWDTEN=OFF, CP=OFF, BWP=OFF
 
 int main(void) {
+    DDPCONbits.JTAGEN = 0;
     //declare any local variables you may need
+    unsinged char number
     
     initKeypad();   
     initUART1();
@@ -19,5 +21,14 @@ int main(void) {
     
 	//add your code here
 	
+    //infinite loop
+    while (1)
+    {
+        number = readKey();
+        if(number != '\0')
+        {
+            UART1_putchar(number);
+        }
+    }
 	
 }
