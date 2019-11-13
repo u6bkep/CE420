@@ -3,6 +3,7 @@
 #include <p32xxxx.h>
 #include "keypad.h"
 #include "uart.h"
+#include "seven_seg.h"
 
 // configuration bit settings, Fcy=80MHz, Fpb=40MHz
 #pragma config POSCMOD=XT, FNOSC=PRIPLL
@@ -16,6 +17,7 @@ int main(void) {
     
     initKeypad();   
     initUART1();
+    init_Timer1();
 	
     UART1_putstr("Hello, please enter keys on the keypad:");
     
@@ -28,6 +30,14 @@ int main(void) {
         if(number != '\0')
         {
             UART1_putchar(number);
+            
+            if(number == '#' || number == '*')
+                number = 0;
+            
+            segValues[3] = segValues[2];
+            segValues[2] = segValues[1];
+            segValues[1] = segValues[0];
+            segValues[0] =  number;
         }
     }
 	
