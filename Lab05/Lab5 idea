@@ -1,0 +1,123 @@
+
+
+
+//method to convert the binary data in PORTE to decimal value
+int BintoDec(binary inputSeg) //not sure what the input type for binary would be
+{
+	switch(inputSeg)
+	{
+		case ob00111111:
+			seg = 0;
+			break;
+		case 0b00000110:
+			seg = 1;
+			break;
+		case 0b01011011:
+			seg = 2;
+			break;
+		case 0b01001111:
+			seg = 3;
+			break;
+		case 0b01100110:
+			seg = 4;
+			break;
+		case 0b01101101:
+			seg = 5;
+			break;
+		case 0b01111101:
+			seg = 6;
+			break;
+		case 0b00001110:
+			seg = 7;
+			break;
+		case 0b01111111:
+			seg = 8;
+			break;
+		case 0b01101111:
+			seg = 9;
+			break;
+	}
+return seg;
+}
+
+//method to convert decimal values to binar
+binary DectoBin(int dec) //not sure what return type binary would fall under. 
+{
+	switch(dec)
+	{
+		case 0:
+			val = segVal[0];
+			break;
+		case 1:
+			val = segVal[1]
+			break;
+		case 2:
+			val = segVal[2];
+			break;
+		case 3:
+			val = segVal[3];
+			break;
+		case 4:
+			val = segVal[4];
+			break;
+		case 5:
+			val = segVal[5];
+			break;
+		case 6:
+			val = segVal[6];
+			break;
+		case 7:
+			val = segVal[7];
+			break;
+		case 8:
+			val = segVal[8];
+			break;
+		case 9:
+			val = segVal[9];
+			break;	
+	}
+	return val;
+}
+
+------------------------------------------------------------- 
+
+//set as user input is done
+//values to be converted from binary to decimal
+minutes = (BintoDec(seg0) * 10) + BintoDec(seg1);
+seconds = (BintoDec(seg2) * 10) + BintoDec(seg3);
+
+-------------------------------------------------------------
+//Clock Trigger Here
+{
+	if(seconds == 0)
+	{
+		if(minutes == 0)
+		{
+			//alarm code here
+		}
+		else
+		{
+			minutes--;
+
+			//new values for the minute display segments
+			seg0 = DectoBin(minutes / 10);
+			seg1 = DectoBin(minutes % 10);
+
+			//start seconds on 60 for end of minute
+			seconds = 60;
+			//updates the vlaues for the second display segments
+			seg2 = DectoBin(seconds / 10);
+			seg3 = DectoBin(seconds % 10);
+		}
+	}
+	else
+	{
+		seconds--;
+
+		//new values for the second display segments
+		seg2 = DectoBin(seconds / 10);
+		seg3 = DectoBin(seconds % 10);
+	}
+
+
+}

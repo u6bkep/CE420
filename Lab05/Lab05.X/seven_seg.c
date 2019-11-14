@@ -5,7 +5,7 @@
 //Example -- initialize Timer1 to trigger interrupts every 1ms 
 void init_Timer1(void) { 
     TMR1 = 0x0000; //clear timer register
-    PR1 = 40; //set the period
+    PR1 = 0x9c; //set the period
     
     //init interrupts 
     mT1SetIntPriority(5);   //group priority set to 5
@@ -29,6 +29,8 @@ void init7Seg(void)
     
     TRISDbits.TRISD2 = OUT;
     TRISDbits.TRISD9 = OUT;
+    
+    segPower = 1;
 }
 
 //void set7Seg(char numbers[4])
@@ -46,33 +48,41 @@ void __ISR(_TIMER_1_VECTOR, IPL5SOFT) T1ISR(void)
 {
     mT1ClearIntFlag();
    
-    
-    PORTE = segLookup[segValues[segState]];
-    //PORTECLR = ~ segLookup[segValues[segState]];
-    
-    switch(segState)
+    if(segPower == 1)
     {
-        case 0:
-            PORTDbits.RD2 = 0;
-            PORTDbits.RD9 = 0;
-            break;
-        case 1:
-            PORTDbits.RD2 = 1;
-            PORTDbits.RD9 = 0;
-            break;
-        case 2:
-            PORTDbits.RD2 = 0;
-            PORTDbits.RD9 = 1;
-            break;
-        case 3:
-            PORTDbits.RD2 = 1;
-            PORTDbits.RD9 = 1;
-            break;
+        PORTE = segLookup[segValues[segState]];
+        //PORTECLR = ~ segLookup[segValues[segState]];
+
+        switch(segState)
+        {
+            case 0:
+                PORTDbits.RD2 = 0;
+                PORTDbits.RD9 = 0;
+                PORTESET = 0b10000000;
+                break;
+            case 1:
+                PORTDbits.RD2 = 1;
+                PORTDbits.RD9 = 0;
+                PORTECLR = 0b10000000;
+                break;
+            case 2:
+                PORTDbits.RD2 = 0;
+                PORTDbits.RD9 = 1;
+                break;
+            case 3:
+                PORTDbits.RD2 = 1;
+                PORTDbits.RD9 = 1;
+                break;
+        }
+
+        segState++;
+        if(segState > 3)
+        {
+            segState = 0;
+        }
     }
-    
-    segState++;
-    if(segState > 3)
+    else
     {
-        segState = 0;
+        PORTE = 0xFF;
     }
 }
