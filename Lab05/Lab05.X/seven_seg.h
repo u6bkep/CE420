@@ -7,9 +7,15 @@
 #define _SUPPRESS_PLIB_WARNING 
 #define _DISABLE_OPENADC10_CONFIGPORT_WARNING
 
-static char segLookup[] = {11111100, 01100000, 11011010, 11110010, 01100110, 10110110, 10111110, 11100000, 11111110, 11100110};
+static char segLookup[] = {~0b00111111, ~0b00000110, ~0b01011011, ~0b01001111, ~0b01100110, ~0b01101101, ~0b01111101, ~0b00000111, ~0b01111111, ~0b01100111};
+
+
+//static char segLookup[] = {0b00000001, 0b00000010, 0b00000100, 0b00001000, 0b00010000, 0b00100000, 0b01000000, 0b10000000, 0b11111111, 0b00000000};
 
 #include <plib.h>
 
-volatile int segState = 0;
-volatile int segValues[] = {0,0,0,0};
+volatile unsigned int segState = 0;
+volatile unsigned int segValues[] = {0,0,0,0};
+
+#define IN      1       
+#define OUT     0
