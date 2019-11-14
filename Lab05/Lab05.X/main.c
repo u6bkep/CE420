@@ -14,32 +14,57 @@ volatile int minutes;
 volatile int seconds;
 volatile int state = 0;
 
-void init_Timer2(void) { 
-//    TMR2 = 0x0000; //clear timer register
-//    PR2 = 400000; //set the period
-//    
-//    //init interrupts 
-//    mT2SetIntPriority(5);   //group priority set to 5
-//    mT2ClearIntFlag(); 
-//    // configure for multi-vectored mode and enable system interrupt 
-//    //INTEnableSystemMultiVectoredInt();
-//    mT2IntEnable(1);    //enable T1 interrupts
-//    T2CON = 0x8038;   //enable timer, set prescaler to 1:8 
+#define PWM_PWR(x) (x==1? (OC4CONSET = 0x8000) : (OC4CONCLR = 0x8000))
+
+void init_Timer4(void) 
+{    
+    T4CON = 0x0;           // Stop the timer and clear the control register,
+    T4CON = 0b01111000;    // prescaler at 1:256,internal clock source, 32bit mode
+    TMR4 = 0x0;            // Clear the timer register 
+    PR4 = 0x2625a;         // Load the period register 
+    IPC5SET = 0x0000000D;  // Set priority level = 3, subpriority level = 1
+    IFS0CLR = 0x00100000;  // Clear the timer interrupt status flag 
+    IEC0SET = 0x00100000;  // Enable timer interrupts
+    T4CONSET = 0x8000;     // Start the timer
     
-    T2CON = 0x0;           // Stop the timer and clear the control register,
-    T2CON = 0b01111000;    // prescaler at 1:256,internal clock source, 32bit mode
-    TMR2 = 0x0;            // Clear the timer register 
-    PR2 = 0x2625a;      // Load the period register 
-    IPC3SET = 0x0000000D;  // Set priority level = 3, subpriority level = 1
-    IFS0CLR = 0x00001000;  // Clear the timer interrupt status flag 
-    IEC0SET = 0x00001000;  // Enable timer interrupts
-    T2CONSET = 0x8000;     // Start the timer
 }
 
-//Timer2 interrupt handler 
-void __ISR(_TIMER_3_VECTOR, IPL5SOFT) T2ISR(void) 
+void init_PWM(void)
 {
-    mT3ClearIntFlag();
+    OC4CON = 0x0000;                         // Turn off the OC1 when performing the setup
+    OC4R = 0x0F00;                           // Initialize primary Compare register
+    OC4RS = 0x0F00;                          // Initialize secondary Compare register
+    OC4CON = 0x0006;                         // Configure for PWM mode without Fault pin
+                                             // enabled
+    PR2 = 0xffff;                            // Set period
+                                             // Configure Timer2 interrupt. Note that in PWM mode, the 
+                                             // corresponding source timer interrupt flag is asserted.
+                                             // OC interrupt is not generated in PWM mode.
+//    IFS0CLR = 0x00000100;                    // Clear the T2 interrupt flag
+//    IEC0SET = 0x00000100;                    // Enable T2 interrupt
+//    IPC2SET = 0x0000001C;                    // Set T2 interrupt priority to 7
+
+    T2CONSET = 0x8000;                       // Enable Timer2
+//    OC4CONSET = 0x8000;                      // Enable OC1
+}
+
+void send_PWM(signed int speed)
+{
+     /************************************
+     * this function takes a speed value
+     * in percentage from -100 to 100
+     * and sets the pwm module accordingly
+     ************************************/
+   
+    OC1RS = ((speed * 4) + 3000);
+    //CCP4RB = ((speed * 4) + 3000);
+    //CCP4CON1Lbits.CCPON = 1;   //Turn on MCCP module
+}
+
+//Timer4 interrupt handler 
+void __ISR(_TIMER_5_VECTOR, IPL5SOFT) T5ISR(void) 
+{
+    mT5ClearIntFlag();
     
     switch(state)
     {
@@ -81,7 +106,8 @@ void __ISR(_TIMER_3_VECTOR, IPL5SOFT) T2ISR(void)
             break;
             
         case 2:
-            segPower = ~segPower;
+            segPower = ! segPower;
+            PWM_PWR(segPower);
             break;
     }
 
@@ -99,7 +125,8 @@ int main(void) {
     initKeypad();   
     initUART1();
     init7Seg();
-	init_Timer2();
+	init_Timer4();
+    init_PWM();
     
     UART1_putstr("Hello, please enter keys on the keypad:");
     
@@ -142,6 +169,8 @@ int main(void) {
                 if(number == '#')
                 {
                     state = 0;
+                    segPower = 1;
+                    PWM_PWR(0);
                 }
                 break;
                         
