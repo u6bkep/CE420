@@ -17,15 +17,21 @@
 extern "C" {
 #endif
     
-
+    #define triggerPulse() OC5CONSET = 0x8000
     
     void initSonar();
 
     float sonarDistance(void);
     
-    void triggerPulse(void);
+    volatile unsigned  int firstCapture;
+    volatile unsigned  int secondCapture;
+    volatile int running;
+    unsigned int runtime;
     
-    volatile int lastSonarResponceTime;
+    void initOC5(void);
+    void initIC4(void);
+    
+    volatile unsigned int lastSonarResponceTime;
 
 
 

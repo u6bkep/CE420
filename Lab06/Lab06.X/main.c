@@ -38,33 +38,81 @@ void msDelay(unsigned int ms)
 void main(void){
     char res[20]; 
      
+    INTEnableSystemMultiVectoredInt();
     initSPI2();         //initialize SPI2 for OLED
     initUART2();		//initialize UART2 for Bluetooth communication
+    initUART1();
     initSonar();
+    
 	//send message to the Bluetooth user
     UART2_putstr("Connection Successful\n");	
     UART2_putstr("Send command to choose operating mode\n");
 //    UART2_putstr("renaming bluetooth device...\n");
-//    UART2_putstr("AT+NAMECHIP_KIT8");
+//    UART2_putstr("\r\nAT+NAMECHIP_KIT5");
 	
 	//initialize OLED and print sensor measurments
-//    SH1106_begin();
-//    SH1106_clear(oled_buf);
-//	SH1106_string(0, 10, "Ultrasonic Sensor ", 15, 0, oled_buf);
-//    SH1106_string(0, 30, "Dist:       ", 15, 0, oled_buf);
-//    float distance = sonarDistance();    //measure distance
-//    sprintf(res, "%5.2f cm", distance);     
-//    SH1106_string(60, 30, res, 15, 0, oled_buf);
-//    SH1106_display(oled_buf);		//display measurement on OLED
+    SH1106_begin();
+    SH1106_clear(oled_buf);
+	SH1106_string(0, 10, "Ultrasonic Sensor ", 15, 0, oled_buf);
+    SH1106_string(0, 30, "Dist:       ", 15, 0, oled_buf);
+    SH1106_string(0, 50, "time:       ", 15, 0, oled_buf);
+    float distance = sonarDistance();    //measure distance
+    sprintf(res, "%5.2f cm", distance);     
+    SH1106_string(60, 30, res, 15, 0, oled_buf);
+    SH1106_display(oled_buf);		//display measurement on OLED
     
+    int mode = 0;
     while(1)
     {
-        triggerPulse();
-        msDelay(1);
-//        float distance = sonarDistance();    //measure distance
-//        sprintf(res, "%5.2f cm %d` ticks", distance, lastSonarResponceTime);
-//        UART2_putstr(res);
-//        UART2_putchar('\n');
+        char input = UART2_getchar();
+        
+        switch(input)
+        {
+            case 'R':
+            case 'r':
+                mode = 0;
+                UART2_putchar(input);
+                if(! running)
+                {
+                    running = TRUE;
+                    triggerPulse();
+                }
+                break;
+                
+            case 'P':
+            case 'p':
+                mode = 1;
+                UART2_putchar(input);
+                running = FALSE;
+                break;
+                
+            default:
+                break;
+        }
+        
+        //UART2_putchar(input);
+        
+        switch(mode)
+        {
+            case 0:
+                distance = sonarDistance();    //measure distance
+                sprintf(res, "%5.2f cm %u ticks\n", distance, lastSonarResponceTime);
+                UART2_putstr(res);
+                sprintf(res, "%5.2f cm", distance);
+                SH1106_string(60, 30, res, 15, 0, oled_buf);
+                sprintf(res, "%5d ticks", runtime);
+                SH1106_string(50, 50, res, 15, 0, oled_buf);
+                SH1106_display(oled_buf);
+                break;
+                
+            case 1:
+                break;
+            
+        }
+        
+        
+        msDelay(500);
+        
     }
 	
 //    mIC5CaptureReady()
