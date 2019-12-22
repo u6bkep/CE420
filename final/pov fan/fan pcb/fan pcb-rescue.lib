@@ -1,0 +1,55 @@
+EESchema-LIBRARY Version 2.4
+#encoding utf-8
+#
+# 3144_hall_effect_sensor-Sensor
+#
+DEF 3144_hall_effect_sensor-Sensor U 0 40 Y Y 1 F N
+F0 "U" 0 0 50 H V C CNN
+F1 "3144_hall_effect_sensor-Sensor" 0 0 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+P 7 0 1 0 -350 -450 150 -450 150 -200 50 -100 -250 -100 -350 -200 -350 -450 N
+X vcc 1 -250 -550 100 U 50 50 1 1 I
+X GND 2 -100 -550 100 U 50 50 1 1 I
+X output 3 50 -550 100 U 50 50 1 1 O
+ENDDRAW
+ENDDEF
+#
+# PICkit3_header-Connector
+#
+DEF PICkit3_header-Connector H 0 40 Y Y 1 F N
+F0 "H" -150 0 50 H V C CNN
+F1 "PICkit3_header-Connector" -400 -450 50 V V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+S 100 -50 -350 -900 0 1 0 N
+X MCLR/Vpp 1 200 -100 100 L 50 50 1 1 I
+X Vdd 2 200 -250 100 L 50 50 1 1 I
+X Ground 3 200 -400 100 L 50 50 1 1 I
+X PGD 4 200 -550 100 L 50 50 1 1 B
+X PGC 5 200 -700 100 L 50 50 1 1 B
+X DNC 6 200 -850 100 L 50 50 1 1 N
+ENDDRAW
+ENDDEF
+#
+# SH-M08-Device
+#
+DEF SH-M08-Device U 0 40 Y Y 1 F N
+F0 "U" 50 -50 50 H V C CNN
+F1 "SH-M08-Device" -50 -750 50 H V C CNN
+F2 "" 50 -50 50 H I C CNN
+F3 "" 50 -50 50 H I C CNN
+DRAW
+S 50 -100 -200 -700 0 1 0 N
+X EN 1 150 -150 100 L 50 50 1 1 N
+X VCC 2 150 -250 100 L 50 50 1 1 I
+X GND 3 150 -350 100 L 50 50 1 1 I
+X TXD 4 150 -450 100 L 50 50 1 1 O
+X RXD 5 150 -550 100 L 50 50 1 1 I
+X State 6 150 -650 100 L 50 50 1 1 N
+ENDDRAW
+ENDDEF
+#
+#End Library

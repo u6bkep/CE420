@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP PIC24FV16KM202-I_SP
+D MICROCHIP - PIC24FV16KM202-I/SP - MCU, 16BIT, PIC24, 32MHZ, SPDIP-28
+K
+F http://ww1.microchip.com/downloads/en/DeviceDoc/33030a.pdf
+$ENDCMP
+#
+#End Doc Library
